@@ -1,0 +1,25 @@
+services:
+  postgres:
+    container_name: postgres-sql-devspace
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_DB: dev_space
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - 6666:6666
+    networks:
+      - spring-demo
+    restart: always
+
+networks:
+  spring-demo:
+    driver: bridge
+
+
+volumes:
+  postgres:
+    driver: local
