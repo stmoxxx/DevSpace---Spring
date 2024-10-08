@@ -60,7 +60,7 @@ public class AuthenticationService {
         );
     }
 
-    //    @Transactional
+//    @Transactional
     public void activateAccount(String token) throws MessagingException {
         UserToken savedToken = tokenRepository.findByToken(token)
                 .orElseThrow(() -> new RuntimeException("Invalid token"));
