@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
-@EnableJpaAuditing  //  makes auditing possible on Entities
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")  // makes auditing possible on Entities
 @EnableAsync
 public class DevspaceBackApplication {
 

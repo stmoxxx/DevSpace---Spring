@@ -1,5 +1,6 @@
 package devspace.devspaceback.models;
 
+import devspace.devspaceback.models.media.UserMedia;
 import devspace.devspaceback.roles.Role;
 import jakarta.persistence.*;
 import jakarta.persistence.Id;
@@ -43,11 +44,21 @@ public class UserEntity implements UserDetails, Principal {
 
     private String password;
 
-    private String profile_picture;
+    private String bio;
 
     private boolean accountLocked;
 
     private boolean enabled;
+
+    @OneToMany(mappedBy = "user_entity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserMedia> userMedia;
+
+    @ManyToMany
+    @JoinTable(name = "friends", joinColumns = @JoinColumn(name = "user1_id"), inverseJoinColumns = @JoinColumn(name = "user2_id"))
+    private List<UserEntity> friends;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Role> roles;
 
     @CreatedDate
     @JoinColumn(nullable = false, updatable = false)
@@ -56,11 +67,6 @@ public class UserEntity implements UserDetails, Principal {
     @LastModifiedDate
     @JoinColumn(insertable = false)
     private LocalDateTime lastOnlineTime;
-
-    //    private List<Friends> friends;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Role> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

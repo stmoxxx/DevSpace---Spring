@@ -1,48 +1,39 @@
 package devspace.devspaceback.models;
 
-import lombok.Data;
+import devspace.devspaceback.models.media.PostMedia;
+import lombok.*;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostEntity {
+@SuperBuilder
+@Getter
+@Setter
+@Table(name = "post")
+public class PostEntity extends DefaultEntityTools {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String title;
-    private String author;
-    private String text;
-    private String postImage;
-    private boolean isPrivate;
-
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     @CreatedBy
-    @Column(nullable = false,updatable = false)
-    private Long createdBy;
+    private UserEntity author; // Link to the user who created the post
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdDate;
+    @OneToMany(mappedBy = "post",  fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CommentaryEntity> commentaries;
 
-    @LastModifiedDate
-    @Column(insertable = false)
-    private LocalDateTime modifiedDate;
+    @OneToMany(mappedBy = "post_entity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PostMedia> postMedia;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "statistic_id", referencedColumnName = "statisticId")
+    private Statistic statistic; // Post statistics
+
+    private String text;
 
 
-
-    //   private String authorImage;
-    //
-    //    private List<PostImages> images;
-    //    private List<PostCommentaries> commentaries;
-    //    private List<PostStatistic> statistic;
 }
 

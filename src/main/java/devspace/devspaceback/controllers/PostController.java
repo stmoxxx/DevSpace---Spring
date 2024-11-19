@@ -19,7 +19,7 @@ public class PostController {
     public ResponseEntity<List<PostEntity>> getPosts(){
         List<PostEntity> posts = new ArrayList<>();
 
-        posts.add(new PostEntity(123, "Malso", "dsadasdasd" ));
+//        posts.add(new PostEntity(123, "Malso", "dsadasdasd" ));
 
         return ResponseEntity.ok(posts);
     }
