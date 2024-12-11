@@ -1,12 +1,12 @@
 package devspace.devspaceback.services;
 
-import devspace.devspaceback.models.RegistrationRequestEntity;
+import devspace.devspaceback.models.Requests.RegistrationRequestEntity;
 import devspace.devspaceback.models.UserEntity;
 import devspace.devspaceback.repositories.role.RoleRepository;
 import devspace.devspaceback.repositories.token.TokenRepository;
 import devspace.devspaceback.repositories.user.UserRepository;
-import devspace.devspaceback.security.AuthenticationRequest;
-import devspace.devspaceback.security.AuthenticationResponse;
+import devspace.devspaceback.models.Requests.AuthenticationRequest;
+import devspace.devspaceback.models.Responses.AuthenticationResponse;
 import devspace.devspaceback.token.UserToken;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
@@ -16,7 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
@@ -110,7 +109,7 @@ public class AuthenticationService {
         StringBuilder codeBuilder = new StringBuilder();
         SecureRandom secureRandom = new SecureRandom();
 
-        for (int i = 0; i <length; i++){
+        for (int i = 0; i < length; i++) {
             int randomIndex = secureRandom.nextInt(characters.length());
             codeBuilder.append(characters.charAt(randomIndex));
         }

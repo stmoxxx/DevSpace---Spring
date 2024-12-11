@@ -1,4 +1,4 @@
-package devspace.devspaceback.security;
+package devspace.devspaceback.models.Responses;
 
 
 import lombok.Builder;

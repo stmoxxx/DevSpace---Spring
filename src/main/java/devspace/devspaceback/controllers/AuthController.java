@@ -1,9 +1,9 @@
 package devspace.devspaceback.controllers;
 
 
-import devspace.devspaceback.models.RegistrationRequestEntity;
-import devspace.devspaceback.security.AuthenticationRequest;
-import devspace.devspaceback.security.AuthenticationResponse;
+import devspace.devspaceback.models.Requests.RegistrationRequestEntity;
+import devspace.devspaceback.models.Requests.AuthenticationRequest;
+import devspace.devspaceback.models.Responses.AuthenticationResponse;
 import devspace.devspaceback.services.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;

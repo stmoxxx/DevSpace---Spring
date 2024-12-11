@@ -20,6 +20,8 @@ public class CommentaryEntity extends DefaultEntityTools{
     @JoinColumn(name = "post_id", nullable = false)
     private PostEntity post; // Indicates the post to which the comment relates
 
+    private Double note;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity author; // Indicates the author of the comment

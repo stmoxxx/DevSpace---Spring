@@ -31,7 +31,7 @@ public class UserEntity implements UserDetails, Principal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String firstname;
 
@@ -59,6 +59,9 @@ public class UserEntity implements UserDetails, Principal {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
+
+//    @OneToMany(fetch = FetchType.EAGER)
+//    private List<PostEntity> posts;
 
     @CreatedDate
     @JoinColumn(nullable = false, updatable = false)

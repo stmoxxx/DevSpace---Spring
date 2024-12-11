@@ -1,6 +1,5 @@
 package devspace.devspaceback.models;
 
-import devspace.devspaceback.models.media.PostMedia;
 import lombok.*;
 import jakarta.persistence.*;
 import lombok.experimental.SuperBuilder;
@@ -13,9 +12,14 @@ import java.util.List;
 @NoArgsConstructor
 @SuperBuilder
 @Getter
+@Builder
 @Setter
 @Table(name = "post")
-public class PostEntity extends DefaultEntityTools {
+public class PostEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -25,8 +29,9 @@ public class PostEntity extends DefaultEntityTools {
     @OneToMany(mappedBy = "post",  fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommentaryEntity> commentaries;
 
-    @OneToMany(mappedBy = "post_entity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<PostMedia> postMedia;
+//    @OneToMany(mappedBy = "post_entity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private String postMedia;
+    //private List<PostMedia> postMedia;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "statistic_id", referencedColumnName = "statisticId")
@@ -34,6 +39,9 @@ public class PostEntity extends DefaultEntityTools {
 
     private String text;
 
+    private String title;
+
+    private boolean isPrivate;
 
 }
 

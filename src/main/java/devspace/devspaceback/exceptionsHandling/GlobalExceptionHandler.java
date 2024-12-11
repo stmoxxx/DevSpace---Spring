@@ -1,6 +1,6 @@
 package devspace.devspaceback.exceptionsHandling;
 
-import devspace.devspaceback.exceptions.BusinessErrorCodes;
+import devspace.devspaceback.exceptions.OperationNotPermittedException;
 import jakarta.mail.MessagingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -95,6 +95,17 @@ public class GlobalExceptionHandler {
                 .body(ExceptionResponse
                         .builder()
                         .businessErrorDescription("INTERNAL ERROR, please contact the admin")
+                        .error(exception.getMessage())
+                        .build()
+                );
+    }
+
+    @ExceptionHandler({OperationNotPermittedException.class})
+    public ResponseEntity<ExceptionResponse> handleException (OperationNotPermittedException exception){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ExceptionResponse
+                        .builder()
                         .error(exception.getMessage())
                         .build()
                 );
