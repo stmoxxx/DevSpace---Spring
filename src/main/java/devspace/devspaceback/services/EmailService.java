@@ -44,7 +44,7 @@ public class EmailService {
     }
 
     public void sendVerificationEmail (String email, String name, String token){
-        String body = EmailTemplates.verificationTemplate(name, domain + "/confirmation/" + token);
+        String body = EmailTemplates.verificationTemplate(name, token);
         sendEmail(email, "Verify your registration", body);
     }
 

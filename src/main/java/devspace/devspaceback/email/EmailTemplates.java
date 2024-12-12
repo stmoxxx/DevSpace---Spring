@@ -2,7 +2,7 @@ package devspace.devspaceback.email;
 
 public class EmailTemplates {
 
-    private static String standardTemplate(String text, String link, String button) {
+    private static String standardTemplate(String text, String button) {
         return "<!DOCTYPE html> \n" +
                 "<html lang=en> \n" +
                 "<head> \n" +
@@ -76,24 +76,20 @@ public class EmailTemplates {
                 "\n" +
                 "    <div id=\"buttonDiv\"> \n" +
                 "        <div id=\"button\">\n" +
-                "            <a href=\"" + link + "\">" +
+                "            <a href=\"" + "\">" +
                 button +
                 "            </a> \n" +
                 "        </div>\n" +
                 "    </div> \n" +
-//                "<div id=\"tokenDiv> \n" +
-//                token +
-//                "</div>" +
                 "</div>\n" +
                 "</body> \n" +
                 "</html>";
     }
 
-    public static String verificationTemplate(String name, String link) {
+    public static String verificationTemplate(String name, String token) {
         return standardTemplate(
 
-                "Hello, " + name + ", if you have just registered on Snek-home, please confirm your email.", link,
-                "Verify your account"
+                "Hello, " + name + ", if you have just registered on DevSpace, please confirm your email.", token
         );
     }
 

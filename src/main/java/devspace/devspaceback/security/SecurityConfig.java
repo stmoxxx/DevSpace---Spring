@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -26,14 +27,28 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
+                .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(req -> req.requestMatchers(
-                        "api/**",
-                        "api/auth/**",
-                        "api/user/**",
-                        "api/swagger-config/**",
-                        "api/swagger-config/"
+                .authorizeHttpRequests(req ->
+                        req.requestMatchers(
+                                             "/",
+                                             "api/**",
+                                             "/index.html",
+                                             "api/auth/**",
+                                             "api/user/**",
+                                             "api/swagger-config/**",
+                                             "api/swagger-config/",
+                                        "/auth/**",
+                                        "/v2/api-docs",
+                                        "/v3/api-docs",
+                                        "/v3/api-docs/**",
+                                        "/swagger-resources",
+                                        "/swagger-resources/**",
+                                        "/configuration/ui",
+                                        "/configuration/security",
+                                        "/swagger-ui/**",
+                                        "/webjars/**",
+                                        "/swagger-ui.html"
                                 ).permitAll()
                                 .anyRequest()
                                 .authenticated()

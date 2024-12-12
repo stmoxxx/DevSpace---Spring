@@ -1,0 +1,1 @@
+SELECT * FROM post WHERE user_id = 1 LIMIT 10 OFFSET 0;

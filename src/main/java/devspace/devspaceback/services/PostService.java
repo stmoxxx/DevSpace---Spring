@@ -10,6 +10,7 @@ import devspace.devspaceback.models.Responses.SavedPostsResponse;
 import devspace.devspaceback.models.UserEntity;
 import devspace.devspaceback.pagination.PageResponse;
 import devspace.devspaceback.repositories.post.PostRepository;
+import devspace.devspaceback.repositories.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -31,13 +35,27 @@ public class PostService {
     private final SavedPostsRepository savedPostsRepository;
     private final PostMapper postMapper;
     private final FileStorageService  fileStorageService;
+    private final UserRepository userRepository;
 
+//    public Long savePost(PostRequest request, Authentication connectedUser) {
+//        UserEntity user = (UserEntity) connectedUser.getPrincipal();
+//        PostEntity post = postMapper.toPost(request);
+//        post.setAuthor(user);
+//        return postRepository.save(post).getId();
+//    }
+
+    @Transactional
     public Long savePost(PostRequest request, Authentication connectedUser) {
-        UserEntity user = ((UserEntity) connectedUser.getPrincipal());
-        PostEntity post = postMapper.toPost(request);
-        post.setAuthor(user);
-        return postRepository.save(post).getId();
+        Object principal = connectedUser.getPrincipal();
+        if (principal instanceof UserEntity) {
+            UserEntity user = (UserEntity) principal;
+            PostEntity post = postMapper.toPost(request, user);
+            return postRepository.save(post).getId();
+        } else {
+            throw new IllegalStateException("Expected UserEntity, but got: " + principal.getClass().getName());
+        }
     }
+
 
     public PostResponse findById (Long postId){
         return postRepository.findById(postId)
@@ -45,11 +63,20 @@ public class PostService {
                 .orElseThrow(() -> new EntityNotFoundException("Post with ID: " + postId + "doesn't exist"));
     }
 
+    @Transactional
     public PageResponse<PostResponse> findAllPosts(int page, int size, Authentication connectedUser) {
         UserEntity user = ((UserEntity) connectedUser.getPrincipal());
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
+
+        System.out.println("User ID: " + user.getId());
+        System.out.println("Page: " + page + ", Size: " + size);
+
         Page<PostEntity> posts = postRepository.findAllDisplayablePosts(pageable, user.getId());
-        List<PostResponse> postResponse =  posts.stream()
+
+        // Логирование результата запроса
+        System.out.println("Found posts: " + posts.getContent().size());
+
+        List<PostResponse> postResponse = posts.stream()
                 .map(postMapper::toPostResponse)
                 .toList();
         return new PageResponse<>(
@@ -63,6 +90,7 @@ public class PostService {
         );
     }
 
+    @Transactional
     public PageResponse<PostResponse> findAllPostsByAuthor(int page, int size, Authentication connectedUser) {
         UserEntity user = ((UserEntity) connectedUser.getPrincipal());
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
@@ -82,6 +110,7 @@ public class PostService {
         );
     }
 
+    @Transactional
     public PageResponse<SavedPostsResponse> findAllSavedPosts(int page, int size, Authentication connectedUser) {
         UserEntity user = ((UserEntity) connectedUser.getPrincipal());
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
@@ -111,6 +140,7 @@ public class PostService {
         return postId;
     }
 
+    @Transactional
     public Long repostPost(Long postId, Authentication connectedUser) {
         PostEntity post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("No post with ID" + postId));

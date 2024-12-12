@@ -6,13 +6,14 @@ import jakarta.validation.constraints.NotNull;
 
 public record PostRequest(
         Long id,
-        UserEntity author,
         @NotNull(message = "100")
         @NotEmpty(message = "100")
         String text,
         @NotNull(message = "102")
         @NotEmpty(message = "102")
-        String title
+        String title,
+        boolean isPrivate
+
 ) {
 
 

@@ -1,5 +1,6 @@
 package devspace.devspaceback.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import jakarta.persistence.*;
 import lombok.experimental.SuperBuilder;
@@ -15,16 +16,21 @@ import java.util.List;
 @Builder
 @Setter
 @Table(name = "post")
-public class PostEntity {
+public class PostEntity extends DefaultEntityTools{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    @CreatedBy
-    private UserEntity author; // Link to the user who created the post
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private UserEntity author;
+
+//    @ManyToOne
+//    @JoinColumn(name = "user_id", nullable = false)
+//    @CreatedBy
+//    private UserEntity author; // Link to the user who created the post
 
     @OneToMany(mappedBy = "post",  fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommentaryEntity> commentaries;

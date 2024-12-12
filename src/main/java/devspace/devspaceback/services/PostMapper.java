@@ -11,13 +11,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PostMapper {
-    public PostEntity toPost(PostRequest request) {
-        return PostEntity.
-                builder()
+    public PostEntity toPost(PostRequest request, UserEntity author) {
+        return PostEntity.builder()
                 .id(request.id())
                 .title(request.title())
                 .text(request.text())
-                .author(UserEntity.builder().build())
+                .author(author)
                 .build();
 
     }

@@ -50,12 +50,12 @@ public class UserEntity implements UserDetails, Principal {
 
     private boolean enabled;
 
-    @OneToMany(mappedBy = "user_entity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<UserMedia> userMedia;
-
-    @ManyToMany
-    @JoinTable(name = "friends", joinColumns = @JoinColumn(name = "user1_id"), inverseJoinColumns = @JoinColumn(name = "user2_id"))
-    private List<UserEntity> friends;
+//    @OneToMany(mappedBy = "user_entity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private List<UserMedia> userMedia;
+//
+//    @ManyToMany
+//    @JoinTable(name = "friends", joinColumns = @JoinColumn(name = "user1_id"), inverseJoinColumns = @JoinColumn(name = "user2_id"))
+//    private List<UserEntity> friends;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;

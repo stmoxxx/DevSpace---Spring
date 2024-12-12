@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Collection;
+
 public interface PostRepository extends JpaRepository<PostEntity, Long>, JpaSpecificationExecutor<PostEntity> {
     @Query("""
             SELECT post
@@ -15,4 +17,5 @@ public interface PostRepository extends JpaRepository<PostEntity, Long>, JpaSpec
             AND post.author.id != :userId
             """)
     Page<PostEntity> findAllDisplayablePosts(Pageable pageable, Long userId);
+
 }
